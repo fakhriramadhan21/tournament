@@ -65,6 +65,7 @@
 <?php 
 if($_POST != null) {
 	$TeamArray = preg_split("/[\n\r]+/", $_POST["Teams"], NULL, PREG_SPLIT_NO_EMPTY);
+	shuffle($TeamArray);
 	$BracketArray = array_fill(0, pow(2, ceil(log(count($TeamArray))/log(2)) + 1) - 1, " ");
 	$lastRowIndex = floor(count($BracketArray) / 2);
 	$offset = ceil(count($BracketArray) / 2) - count($TeamArray);
@@ -236,6 +237,7 @@ if($_POST != null) {
 
 
 				echo '<pre>' , var_dump($events) , '</pre>';
+				
 		} else if($tipe=="robin"){ //for round robin
 			$leng=sizeof($TeamArray); //get array size
 			$firstHalf=0;
