@@ -6,16 +6,38 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
+<style>
+/* table{ */
+	/* overflow:hidden; */
+	/* border-collapse: collapse; */
+	/* border-radius: 25px; */
+/* } */
 
-<script type="text/javascript">
+table tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
 
-</script>
+table tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+button {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}
+
+</style>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="jquery.bracket.min.css" />
-<script type="text/javascript" src="jquery-1.6.2.min.js"></script>
+<!-- <script type="text/javascript" src="jquery-1.6.2.min.js"></script> -->
 <script type="text/javascript" src="jquery.bracket.min.js"></script>
-
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script type="text/javascript">
 			$( document ).ready(function() {
+				
 			 var doubleElimination = {
 				"teams": [
 					["Team 1", "Team 2"],

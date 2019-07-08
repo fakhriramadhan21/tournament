@@ -5,6 +5,13 @@
 	global $TeamArray;
 	global $PositionArray;
 
+	
+
+	if (isset($_POST['data'])) {
+		$message = "wrong answer";
+		echo "<script type='text/javascript'>alert('$message');</script>";
+	}
+	
 	function scheduler($teams){
 		if (count($teams)%2 != 0){
 			array_push($teams,"bye");
@@ -24,12 +31,43 @@
 		return $round;
 	}
 
-	function writeTeamSquareToPosition($name, $pos) {
-		echo "<div class=\"TeamSquare\" style=\"position:absolute;z-index:2;left:$pos[0]px;top:$pos[1]px\">$name</div>";
+
+	function someFunction($errno, $errstr) {
+		$message = "wrong answer";
+		echo "<script type='text/javascript'>alert('$message');</script>";
 	}
 	
+	function writeTeamSquareToPosition($name, $pos, $BracketArray,$updatedscore,$id,$winner) {
+		?>
+			
+		<?php
+		$BracketArray1 = unserialize(file_get_contents('yourfile.bin'));
+		echo "<div class=\"TeamSquare\" style=\"position:absolute;z-index:2;left:$pos[0]px;top:$pos[1]px\">";
+		$index = array_search($id, array_column($BracketArray,0));
+
+		if($BracketArray1[0][0]!==""){
+			?>
+				<button onclick="sweet('<?php echo $name ; ?>','<?php echo $index ; ?>','<?php echo $id ; ?>')"><?php print_r($name) ; ?> Score :<?php print_r($updatedscore) ; ?><?php echo $BracketArray1[0][0] ; ?></button>
+			<?php
+		}else if ($BracketArray1[0][0]==""){
+
+		?>
+				<button>winner is <?php echo $BracketArray[0][0] ; ?></button>			
+		<?php
+		}
+		
+		echo "</div>";
+	}
+	function add($a,$b){
+		$c=$a+$b;
+		return $c;
+		$message = "wrong answer";
+		echo "<script type='text/javascript'>alert('$message');</script>";
+	}
+
 	function writeTeamSquare($name) {
 		echo "<div class=\"TeamSquare\">".$name."</div>";
+		
 	}
 	
 	function drawLine($start, $end) {
@@ -66,24 +104,29 @@
 if($_POST != null) {
 	$TeamArray = preg_split("/[\n\r]+/", $_POST["Teams"], NULL, PREG_SPLIT_NO_EMPTY);
 	shuffle($TeamArray);
-	$BracketArray = array_fill(0, pow(2, ceil(log(count($TeamArray))/log(2)) + 1) - 1, " ");
-	$lastRowIndex = floor(count($BracketArray) / 2);
-	$offset = ceil(count($BracketArray) / 2) - count($TeamArray);
+	$BracketArraySingle = array_fill(0, pow(2, ceil(log(count($TeamArray))/log(2)) + 1) - 1, " ");
+	$lastRowIndex = floor(count($BracketArraySingle) / 2);
+	$offset = ceil(count($BracketArraySingle) / 2) - count($TeamArray);
+
+	
 	
 	for($i = 0; $i < count($TeamArray); $i++) {
-		$BracketArray[$lastRowIndex + $i - $offset] = $TeamArray[$i];
+		$BracketArraySingle[$lastRowIndex + $i - $offset] = $TeamArray[$i];
 	}
+
+	$BracketArray = array();
+	for($i = 0; $i < count($BracketArraySingle); $i++) {
+		$BracketArray[$i][2] = $i;
+	}
+	foreach ($BracketArraySingle as $key => $value) {
+		$BracketArray[$key][0] = $value;
+		$BracketArray[$key][1] = "";
+		
+	}
+	file_put_contents('yourfile.bin', serialize($BracketArray));
+
 }
 ?>
-
-
-
-<!-- Page Content -->
-
-
-
-
-<!-- Form Test -->
 <div class=".class"></div>
 
 <form action="index.php" method="post">
@@ -109,18 +152,57 @@ if($_POST != null) {
 <br><br>
 
 <?php
+$BracketArray = unserialize(file_get_contents('yourfile.bin'));
+$output = unserialize(file_get_contents('yourfile.bin'));
+if(isset($_GET["index"])) {
+	$index = $_GET["index"];
+	$newscore = $_GET["value"];
+	$BracketArray = unserialize(file_get_contents('yourfile.bin'));
+	$BracketArray[$index][1]=$newscore;
+	file_put_contents('yourfile.bin', serialize($BracketArray));
+}
 
-	if(isset($TeamArray)) {
-		$nama = $_POST["nama"];
-		$tipe = $_POST["tipe"];
-		$ukuran = $_POST["ukuran"];
+for( $i = 0; $i < count( $BracketArray ); $i=$i+2 )
+{
+		if($BracketArray[$i][1]!="" && $BracketArray[$i-1][1]!=""){
+			$nilai1 = (int)$BracketArray[$i][1];
+			$nilai2 = (int)$BracketArray[$i-1][1];
+			if($nilai1 > $nilai2){
+				$string1= $BracketArray[$i][0];
+				$BracketArray[$i/2-1][0] = $string1;
+				file_put_contents('yourfile.bin', serialize($BracketArray));
+			}else{
+				$string1 = $BracketArray[$i-1][0];
+				$BracketArray[$i/2-1][0] = $string1;
+				file_put_contents('yourfile.bin', serialize($BracketArray));
+			}
+			
+		}
+}
+
+	if(isset($TeamArray)||isset($output)) {
+		if(isset($_POST["nama"])){
+			$nama = $_POST["nama"];
+			$tipe = $_POST["tipe"];
+			$ukuran = $_POST["ukuran"];	
+		
 		?>
 		<p>Nama turnamen :<?php echo $nama ?></p>
 		<p>Tipe turnamen:<?php echo $tipe ?></p>
 		<p>Ukuran :<?php echo $ukuran ?></p>
+		<p>Ukuran :<?php echo $ukuran ?></p>
 		
 		<?php
+		}
+			if(isset($_POST["nama"])){
+				$tipe = $_POST["tipe"];
+			}else{
+				$tipe = "single";
+			}
+
 		if($tipe=="single"){ //For single elimination
+			
+
 			echo "<div class=\"BracketArea\" style=\"height:" . ((pow(2, getDepth($BracketArray)) - 1) * 40 + 30 + 20) . "px;width:" . (getDepth($BracketArray) * 190 + 150 + 20) . "px \">";
 			$offset = 0;
 			for($i = floor(count($BracketArray)/2); $i < count($BracketArray); $i++) {
@@ -131,10 +213,10 @@ if($_POST != null) {
 				if(hasChildren($BracketArray, $i))
 					$PositionArray[$i] = [$PositionArray[$i*2+1][0] + 190, midpoint($PositionArray[$i*2+1][1], $PositionArray[$i*2+2][1])];
 			}
-				writeTeamSquareToPosition($BracketArray[0], $PositionArray[0]); //Write First one without lines
+				writeTeamSquareToPosition($BracketArray[0], $PositionArray[0],$BracketArray,$BracketArray[1],$BracketArray[2],$BracketArray[0][0]); //Write First one without lines
 				for($i = 1; $i < count($BracketArray); $i++) {
-					if($i > (floor(count($BracketArray) / 2)) and $BracketArray[$i] == " ") { continue; } //Don't print empty squares in the last row
-					writeTeamSquareToPosition($BracketArray[$i], $PositionArray[$i]);
+					if($i > (floor(count($BracketArray) / 2)) and $BracketArray[$i][0] == " ") { continue; } //Don't print empty squares in the last row
+					writeTeamSquareToPosition($BracketArray[$i][0], $PositionArray[$i],$BracketArray,$BracketArray[$i][1],$BracketArray[$i][2],$BracketArray[0][0]);
 					drawLineToParent($BracketArray, $i, $PositionArray);
 				}
 			echo "</div>";
@@ -246,27 +328,83 @@ if($_POST != null) {
 			$isHome=true;
 			for ($t=0; $t <$leng-1 ; $t++) { 
 				for ($i=0; $i < $leng/2; $i++) {
-					
+					$z = $t+1;
 					if ($i==0){
 						if($isHome){ //Home
-							echo 'Home team=> '.$TeamArray[$i].' vs Away team=> '.$TeamArray[$lastHalf-$i];
+							?>
+							<table>
+							<tr><th style="background-color:black;color:white;" colspan="3">Ronde <?php echo $z?><th></tr>
+							<tr>
+								<td style="background-color:#FF7F50;color:white;">Home</td>
+								<td style="background-color:#FF7F50;color:white;text-align: center; vertical-align: middle;" rowspan="<?php echo $leng ;?>">VS</td>
+								<td style="background-color:#FF7F50;color:white;">Away</td>
+							</tr>
+							<tr style="background-color:#A9A9A9;color:white;">
+								<td>
+									<?php echo $TeamArray[$i]; ?>
+								</td>
+								<td>
+									<?php echo $TeamArray[$lastHalf-$i];?>
+								</td>
+							</tr>
+							<?php
 							$isHome=false;
 						}else{ //Away
-							echo 'Home team=> '.$TeamArray[$lastHalf-$i].' vs Away team=> '.$TeamArray[$i];
+							?>
+							<table>
+							<tr>
+								<th style="background-color:black;color:white;" colspan="3">Ronde <?php echo $z?><th>
+							</tr>
+							<tr>
+								<td style="background-color:#FF7F50;color:white;">Home</td>
+								<td style="background-color:#FF7F50;color:white;text-align: center; vertical-align: middle;" rowspan="<?php echo $leng ;?>">VS</td>
+								<td style="background-color:#FF7F50;color:white;">Away</td>
+							</tr>
+							<tr style="background-color:#A9A9A9;color:white;">
+								<td>
+									<?php echo $TeamArray[$lastHalf-$i]; ?>
+								</td>
+								<td>
+									<?php echo $TeamArray[$i]; ?>
+								</td>
+							</tr>
+							<?php
 							$isHome=true;
 						}	
 					}else{
 						if($i%2==0){
-						echo 'Home team=> '.$TeamArray[$i].' vs Away team=> '.$TeamArray[$lastHalf-$i];
+							?>
+							<tr style="background-color:#A9A9A9;color:white;">
+								<td>
+									<?php echo $TeamArray[$i]; ?>
+								</td>
+								<td><?php echo $TeamArray[$lastHalf-$i];?></td>
+							</tr>
+							<?php if ($i==$leng/2){ ?>
+							</table>
+							<?php 
+							}else{
+								?>
+								</br></br>
+								<?php
+							}
+							?>
+							
+							<?php
 						}else{
-							echo 'Home team=> '.$TeamArray[$lastHalf-$i].' vs Away team=> '.$TeamArray[$i];	
+							?>
+								<tr style="background-color:#A9A9A9;color:white;">
+									<td>
+										<?php echo $TeamArray[$lastHalf-$i];?>
+									</td>
+									<td>
+										<?php echo $TeamArray[$i];?>
+									</td>
+								</tr>
+							<?php	
 						}
-						$z = $t+1;
-					if($i==$leng/2-1){ //Round
-						echo '&emsp;&emsp;';
-						echo 'Round :'.$z;
-						echo '</br>';
-					}
+						
+					
 					}
 
 
@@ -290,5 +428,6 @@ if($_POST != null) {
 		}
 	}
 ?>
+
 
 <?php include 'footer.php' ?>
