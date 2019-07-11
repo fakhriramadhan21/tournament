@@ -56,7 +56,6 @@
 
 		for($index=count( $BracketArray )-1;$index > 0;$index-=2) {
 				$index1 = $index-1;
-				// echo $index1." ".$index."</br>";
 				if($id%2 && $id!="0" && $BracketArray[$id][0]!=" "&&$BracketArray1[$index][0]!=" "&&$BracketArray1[$index1][0]!=" "){
 					$id1 = $id++;
 					// echo $id1;

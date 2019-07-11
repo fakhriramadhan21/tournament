@@ -40,11 +40,8 @@ button {
  position: relative;
 }
 #div2 {
-/* position:absolute; */
 left:25%;
 top:25%;
-
-/* transform: translate(-50%,-50%); */
 
 }
 
@@ -58,40 +55,7 @@ top:25%;
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.3.5/sweetalert2.css" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.3.5/sweetalert2.all.js"></script>
-<script type="text/javascript">
-			$( document ).ready(function() {
-				
-			 var doubleElimination = {
-				"teams": [
-					["Team 1", "Team 2"],
-					["Team 3", "Team 4"]
-				],
-				"results": [            // List of brackets (three since this is double elimination)
-					[                     // Winner bracket
-					[[1, 2], [3, 4]],   // First round and results
-					[[5, 6]]            // Second round
-					],
-					[                     // Loser bracket
-					[[7, 8]],           // First round
-					[[9, 10]]           // Second round
-					],
-					[                     // Final "bracket"
-					[                   // First round
-						[11, 12],         // Match to determine 1st and 2nd
-						[13, 14]          // Match to determine 3rd and 4th
-					],
-					[                   // Second round
-						[15, 16]          // LB winner won first round (11-12) so need a final decisive round
-					]
-					]
-				]
-				}
-			
-				$('.demo').bracket({
-					init: doubleElimination
-				});
-			});
-			</script>
+
 <!--My CSS script-->
 <link rel="stylesheet" href="./main.css">
 </head>

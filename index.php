@@ -39,14 +39,6 @@ $i=count( $output );
 $i=$i/2;
 $i = round($i);
 $j = $i/2;
-// echo $j;
-
-// foreach (range(0, $j) as $number) {
-//     echo $number;
-// }
-// for($index=count( $output );$index > 0;$index-=2) {
-//     echo $index;
-// }
 
 if(isset($_GET["index"])) {
 	$BracketArray_index = unserialize(file_get_contents('yourfile.bin'));
@@ -58,10 +50,6 @@ if(isset($_GET["index"])) {
 	$BracketArray = unserialize(file_get_contents('yourfile.bin'));
 	$BracketArray[$index][1]=$newscore;
 	$BracketArray[$index1][1]=$newscore1;
-	// if($BracketArray_index[$indexbaru][0]=" "||$BracketArray_index[$indexbaru][0]=" "){
-	// 	echo "<script type='text/javascript'>document.getElementById('$indexbaru').disabled=true;</script>";
-	// 	echo "<script type='text/javascript'>alert('$indexbaru');</script>";		
-	// }
 	file_put_contents('yourfile.bin', serialize($BracketArray));
 }
 
@@ -130,8 +118,6 @@ $output = unserialize(file_get_contents('yourfile.bin'));
 			?>
 			
 			<div id="div2" style="display:inline-block;" class="card-body text-success">
-				<!-- <h5 class="card-title">Success card title</h5> -->
-				<!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
 			<?php
 			$offset = 0;
 			for($i = floor(count($BracketArray)/2); $i < count($BracketArray); $i++) {
@@ -153,7 +139,7 @@ $output = unserialize(file_get_contents('yourfile.bin'));
 			</div>
 			<button type="button" class="btn btn-primary" onclick="window.print();">Print this Bracket</button>
 			<?php
-			echo '<pre>' , var_dump($BracketArray) , '</pre>';
+			// echo '<pre>' , var_dump($BracketArray) , '</pre>';
 			echo "</div>";
 		} else if($tipe=="double"){ //For double elimination
 			$rounds = log( count( $TeamArray ), 2 ) + 1;
@@ -350,16 +336,6 @@ $output = unserialize(file_get_contents('yourfile.bin'));
 				array_pop($TeamArray);
 				
 			}
-
-
-			// foreach ($TeamArray as $home) {
-			// 	foreach ($TeamArray as $away) {
-			// 		if ($home === $away) {
-			// 		   continue;
-			// 		}
-			// 		echo 'Home Team => '.$home.' vs '.$away.' <= Away Team';
-			// 	} 
-			// }
 		}
 	}
 ?>

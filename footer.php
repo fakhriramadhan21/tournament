@@ -5,13 +5,15 @@
 </div> <!-- Table -->
 </body>
 <script type="text/javascript">
-$(document).ready(function() {
-	// textFit(document.querySelector("h5"));
-	// jQuery("h5").fitText(0.38);
-	// $('h5').quickfit();
-        });
 function test(id,id1,tim,tim1){
-	// alert("bisa nih gan");
+	
+	if (tim==" "||tim1==" "){
+		swal({
+			type: 'error',
+			title: 'Oops...',
+			text: 'Silahkan inputkan seluruh skor di babak sebelumnya terlebih dahulu!',
+		}).catch(swal.noop)	
+	} else {
 		swal({
 		title: 'Input skor',
 		showCancelButton: true,
@@ -31,7 +33,9 @@ function test(id,id1,tim,tim1){
 		}
 		}).then(function (result) {
 		getnilai(id,id1,tim,tim1);
-		}).catch(swal.noop)
+		}).catch(swal.noop)	
+	}
+		
 
 }
 function winner(){
@@ -62,7 +66,6 @@ function getnilai(id,id1,tim,tim1){
 						},
 						error: function () {
 							alert("ajax error ");
-							// OnError(cartObject.productID)
 						},
 						complete: function () {
 						}
