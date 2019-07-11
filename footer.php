@@ -18,8 +18,8 @@ function test(id,id1,tim,tim1){
 		title: 'Input skor',
 		showCancelButton: true,
 		html:
-			'<input type="number" id="swal-input1" class="swal2-input" placeholder="Skor tim '+tim+'">' +
-			'<input type="number" id="swal-input2" class="swal2-input" placeholder="Skor tim '+tim1+'">',
+			'<input id="swal-input1" class="swal2-input" placeholder="Skor tim '+tim+'">' +
+			'<input id="swal-input2" class="swal2-input" placeholder="Skor tim '+tim1+'">',
 		preConfirm: function () {
 			return new Promise(function (resolve) {
 			resolve([
@@ -32,6 +32,7 @@ function test(id,id1,tim,tim1){
 			$('#swal-input1').focus()
 		}
 		}).then(function (result) {
+			
 		getnilai(id,id1,tim,tim1);
 		}).catch(swal.noop)	
 	}
