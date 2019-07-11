@@ -58,20 +58,29 @@ function winner(){
 		
 }
 function getnilai(id,id1,tim,tim1){
+if(isNaN(skor1)||isNaN(skor1)){
+	swal({
+			type: 'error',
+			title: 'Oops...',
+			text: 'Input skor dengan angka!',
+		}).catch(swal.noop)
+ }else{
 	$.ajax({
 						type:'GET',
      					 url:'index.php',
     					 data:{action:"en"},
-						success: function () {
+		success: function () {
 							window.location.href = "index.php?index="+id+"&index1="+id1+"&score="+skor1+"&score1="+skor2;
 						},
-						error: function () {
+		error: function () {
 							alert("ajax error ");
 						},
-						complete: function () {
+		complete: function () {
 						}
-						});  // end Ajax   
+			});  // end Ajax   
 
+ }
+	
 					
 }
 function sweet (name,index,id){
